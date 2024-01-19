@@ -8,7 +8,7 @@ const getRepositories = async (
     request: { repo = '', name, perPage, page }
   } = payload;
   const response = await fetch(
-    `${BASE_URL}/search/repositories?q=${repo}+org:${name}+fork:true&per_page=${perPage}&page=${page}`,
+    `${BASE_URL}/search/repositories?q=${repo}+org:${name}+fork:true&per_page=${perPage}&page=${page}&sort=stars`,
     {
       method: 'GET',
       headers: {

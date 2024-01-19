@@ -69,6 +69,7 @@ const SearchGithubOrganisation = () => {
   const _selectOption = (name: string) => {
     setValue('organization', name);
     dispatch(resetRepository());
+    setPage(0);
   };
 
   const _handleChangePage = (newPage: number) => {
@@ -90,6 +91,19 @@ const SearchGithubOrganisation = () => {
   const _handleChangeRowsPerPage = (newRowsPerPage: number) => {
     setPage(0);
     setRowsPerPage(newRowsPerPage);
+  };
+
+  const  _handleRepoChange= (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.name, e.target.value);
+    setPage(0);
+    trigger();
+
+    dispatch(getRepository({
+      name: orgName,
+      repo: e.target.value,
+      page: page + 1,
+      perPage: rowsPerPage
+    }))
   };
 
   const _handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -141,7 +155,7 @@ const SearchGithubOrganisation = () => {
               fullWidth
               label="Enter repository"
               variant="outlined"
-              onInputChange={_handleOnChange}
+              onInputChange={_handleRepoChange}
             />
           </AppFallback>
 

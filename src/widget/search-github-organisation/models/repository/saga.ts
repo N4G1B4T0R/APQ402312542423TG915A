@@ -1,9 +1,9 @@
-import { call, put, takeLatest, cancelled } from 'redux-saga/effects';
+import { call, put, cancelled, debounce } from 'redux-saga/effects';
 import { openUserMessage, UserMessageStatus } from 'features/user-message';
 
 import { getRepositories } from './api';
 import { GetRepositoryPayload, GitHubRepositoryPayload } from './interfaces';
-import { saveRepository, loadingRepository, resetRepository } from './slice';
+import { saveRepository, loadingRepository } from './slice';
 import { types } from './types';
 
 export function* saveRepositoryData({
@@ -26,10 +26,11 @@ export function* saveRepositoryData({
 
   try {
     while (moreResults) {
-      const { name } = payload;
+      const { name, repo } = payload;
       const request = {
         page: count,
         perPage: 100,
+        repo,
         name
       };
       const { response, error }: { response: GitHubRepositoryPayload; error?: string } = yield call(
@@ -43,7 +44,6 @@ export function* saveRepositoryData({
       if (error) {
         moreResults = false;
         yield put(openUserMessage({ status: UserMessageStatus.error, message: error }));
-        yield put(resetRepository());
         return;
       }
 
@@ -73,7 +73,8 @@ export function* saveRepositoryData({
 }
 
 export function* watchAllRepository() {
-  yield takeLatest<{ type: types.GET_REPOSITORY; payload: GetRepositoryPayload }>(
+  yield debounce<{ type: types.GET_REPOSITORY; payload: GetRepositoryPayload }>(
+    300,
     types.GET_REPOSITORY,
     saveRepositoryData
   );
