@@ -8,10 +8,9 @@
 # testing
 /coverage
 
-
-
 # production
 /build
+.env
 
 # IDEs and editors
 /.idea
@@ -35,3 +34,4 @@ yarn-debug.log*
 yarn-error.log*
 
 package-lock.json
+
