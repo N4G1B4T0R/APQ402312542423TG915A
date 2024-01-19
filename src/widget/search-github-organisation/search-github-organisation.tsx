@@ -61,7 +61,7 @@ const SearchGithubOrganisation = () => {
   }, [orgName]);
 
   const _handleSearch = (val: string) => {
-    if (val?.length > 3) {
+    if (val?.length > 2) {
       dispatch(getOrganisations(val));
     }
   };
