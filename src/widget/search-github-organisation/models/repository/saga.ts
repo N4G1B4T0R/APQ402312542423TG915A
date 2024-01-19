@@ -59,12 +59,13 @@ export function* saveRepositoryData({
         moreResults = false;
       }
 
-      yield put(loadingRepository(false));
       yield put(saveRepository(fullResponse));
 
       count++;
     }
   } finally {
+    yield put(loadingRepository(false));
+
     if (yield cancelled()) {
       controller.abort();
     }

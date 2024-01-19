@@ -39,6 +39,12 @@ export const AppTable: FC<IProps> = (props) => {
     disabledPagination,
     isLoading
   } = props;
+  const start = page * rowsPerPage;
+  const end = page * rowsPerPage + rowsPerPage;
+  const rowLen = rows?.length;
+  const moreResult = rowLen > start && rowLen<end && isLoading;
+  const skeletonCount = moreResult ? end - rowLen: 10;
+
   const _handlePage = (event: unknown, newPage: number) => {
     handleChangePage(newPage);
   };
@@ -70,10 +76,6 @@ export const AppTable: FC<IProps> = (props) => {
   };
 
   const _renderRows = () => {
-    const start = page * rowsPerPage;
-    const end = page * rowsPerPage + rowsPerPage;
-    const rowLen = rows?.length;
-
     if (!rowLen && !isLoading) {
       return (
         <TableRow>
@@ -92,16 +94,16 @@ export const AppTable: FC<IProps> = (props) => {
 
     return rows.slice(start, end).map((row: any) => {
       return (
-        <TableRow hover tabIndex={-1} key={row.name}>
-          {columns.map((column) => {
-            const value = row[column.id];
-            return (
-              <TableCell key={column.id} align={column.align}>
-                {column.format && typeof value === 'number' ? column.format(value) : value}
-              </TableCell>
-            );
-          })}
-        </TableRow>
+          <TableRow hover tabIndex={-1} key={row.name}>
+            {columns.map((column) => {
+              const value = row[column.id];
+              return (
+                <TableCell key={column.id} align={column.align}>
+                  {column.format && typeof value === 'number' ? column.format(value) : value}
+                </TableCell>
+              );
+            })}
+          </TableRow>
       );
     });
   };
@@ -122,7 +124,10 @@ export const AppTable: FC<IProps> = (props) => {
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>{_renderRows()}</TableBody>
+          <TableBody>
+            {_renderRows()}
+            { moreResult ? _createArrayOfObjects(skeletonCount) : null}
+          </TableBody>
         </Table>
       </TableContainer>
       <TablePagination

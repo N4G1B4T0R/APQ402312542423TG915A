@@ -9,8 +9,8 @@ export const repositorySelector: Selector<RootState, GitHubRepositoryState> = (s
 
 export const repositoryOptionSelector = (
   repoName: string,
-  min: number,
-  max: number
+  min: string,
+  max: string
 ): Selector<RootState, any> =>
   createSelector([repositorySelector], (data) => {
     let rows = data.items.map(({ id, name, stargazers_count, open_issues_count }) => ({
@@ -26,10 +26,10 @@ export const repositoryOptionSelector = (
       );
     }
 
-    if ((min || max) && max >= min) {
+    if ((min || max) && (!max || max >= min)) {
       rows = rows.filter(
         (repository) =>
-          (!min || repository.issueCount >= min) && (!max || repository.issueCount <= max)
+          (!min || repository.issueCount >= +min) && (!max || repository.issueCount <= +max)
       );
     }
 

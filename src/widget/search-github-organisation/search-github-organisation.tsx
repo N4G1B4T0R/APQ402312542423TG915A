@@ -45,7 +45,7 @@ const SearchGithubOrganisation = () => {
   const [orgName, repoName, min, max] = watch(['organization', 'repository', 'min', 'max']);
   const errorMessage = (errors.min?.message as string) || (errors.max?.message as string);
   const options = useSelector(autocompleteRenderOption);
-  const { rows, rowCount, isLoading } = useSelector(repositoryOptionSelector(repoName, +min, +max));
+  const { rows, rowCount, isLoading } = useSelector(repositoryOptionSelector(repoName, min, max));
 
   useEffect(() => {
     if (orgName && rowCount <= page * rowsPerPage) {
@@ -76,6 +76,8 @@ const SearchGithubOrganisation = () => {
   };
 
   const _handleRefresh = () => {
+    dispatch(resetRepository());
+    setPage(0);
     dispatch(
       getRepository({
         name: orgName,
@@ -93,7 +95,7 @@ const SearchGithubOrganisation = () => {
   const _handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.name, e.target.value);
     setPage(0);
-    trigger(e.target.name);
+    trigger();
   };
 
   return (
