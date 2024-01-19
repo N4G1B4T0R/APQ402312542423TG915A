@@ -4,13 +4,18 @@ import { searchOrganisation } from './api';
 import { SearchOrganizationsState } from './interfaces';
 import { saveAutocomplete } from './slice';
 import { types } from './types';
+import { openUserMessage, UserMessageStatus } from 'features/user-message';
 
 export function* saveAutocompleteData({ payload }: { payload: string }) {
-  const { response }: { response: SearchOrganizationsState } = yield call(
+  const { response, error }: { response: SearchOrganizationsState, error: string } = yield call(
     searchOrganisation,
     payload
   );
-  yield put(saveAutocomplete(response));
+  if(error) {
+    yield put(openUserMessage({ status: UserMessageStatus.error, message: error }));
+  } else {
+    yield put(saveAutocomplete(response));
+  }
 }
 
 export function* watchAllAutocomplete() {
