@@ -1,4 +1,36 @@
-# Getting Started with Create React App
+# Test project
+
+## Installation
+run this command to install the project `npm i`
+
+update `.env` file with your github AUTH token
+`REACT_APP_AUTH_TOKEN = your token`
+
+here is a documentation how you can install it
+[token installation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token)
+
+start the project: `npm start`
+
+## About the project
+Project implement [FSD](https://feature-sliced.design/) with code-splitting technics for redux and redux-saga.
+
+## limitations and trade-offs
+
+When you are using Github Rest api be aware of some limitations and trade-offs
+
+When utilizing GitHub's REST API with an authentication token, consider the following:
+
+1. **Rate Limits:** Authenticated requests enjoy higher rate limits, but limits still apply. Refer to GitHub's documentation for current rates.
+
+2. **Scopes:** Token capabilities are determined by granted scopes during creation. Ensure the token has the necessary scopes for intended operations.
+
+3. **Token Management:** Securely manage personal access tokens. Regularly review and update permissions.
+
+4**Restrictions:** Repository and organization settings can impose restrictions on certain operations.
+
+For the latest details, consult [GitHub's REST API documentation](https://docs.github.com/en/rest).
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
